@@ -36,12 +36,11 @@ services:
     image: geocoding/frontend
     build:
       context: ./web
-      args:
-        - API_URL=http://dev.projetobrumadinho.ufmg.br:5003
+    environment:
+      - REACT_APP_API_URL=http://dev.projetobrumadinho.ufmg.br:5003
     container_name: geocoding_frontend
     volumes:
-      - './web:/usr/src/app'
-      - '/usr/src/app/node_modules'
+      - './web/src:/usr/src/app/src'
     ports:
       - '3000:3000'
     depends_on:

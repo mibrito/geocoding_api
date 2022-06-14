@@ -17,32 +17,25 @@ class AddressGeocoding extends Component {
     }
 
     getClickedCoordinates(lat, long) {
-        console.log('lat long', lat, long)
         this.setState({ clickedLat: lat })
         this.setState({ clickedLong: long })
     }
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        let response = await Promise.all(this.state.addresses.map(async (address) => {
-            try {
-                const result = await this.apiClient.getAddressGeocoding({ "end": address });
-                return result.data;
-            }
-            catch (error) {
-                console.log(error)
-            }
-        }));
+        let response = await Promise.all(
+            this.state.addresses.map(
+                this.apiClient.getAddressGeocoding({ "end": address })
+            )
+        );
         response = response.flat();
-        console.log('response', response)
         this.setState({ locations: response })
     }
 
-    clickAddAddr() {
-        let new_addresses = this.state.addresses.slice()
-        new_addresses.push("")
-        this.setState({ addresses: new_addresses })
-        console.log(this.state.addresses)
+clickAddAddr() {
+        let addresses = this.state.addresses.slice()
+        addresses.push("")
+        this.setState({ addresses })
     }
 
     render() {
