@@ -33,14 +33,14 @@ class AddressGeocodingByCEP extends Component {
     render() {
         return (
             <div className='page'>
-                <form name="form" class="form" onSubmit={this.handleSubmit}>
+                <form name="form" className="form" onSubmit={this.handleSubmit}>
 
-                    <div class="form-inline ">
-                        <div class="input">
+                    <div className="form-inline ">
+                        <div className="input">
                             <input
                                 type="text"
                                 name="cep"
-                                class="form-control"
+                                className="form-control"
                                 id="cepInput"
                                 required
                                 placeholder="Insira o CEP"
@@ -48,7 +48,7 @@ class AddressGeocodingByCEP extends Component {
                                 onChange={e => this.setState({ cep: e.target.value })}
                             />
                         </div>
-                        <button class="input btn" type="submit">Buscar</button>
+                        <button className="input btn" type="submit">Buscar</button>
                     </div>
 
                 </form>

@@ -16,8 +16,7 @@ class ApiClient {
         const APPLICATION_JSON_MIME_TYPE = 'application/json'
 
         this.instance = axios.create({
-            //baseURL: 'http://geo-api-backend:5003',
-            baseURL: 'http://localhost:5003',
+            baseURL: process.env.API_URL,
             timeout: API_CLIENT_TIMEOUT,
             headers: {
                 common: { Accept: APPLICATION_JSON_MIME_TYPE },
@@ -41,38 +40,32 @@ class ApiClient {
     }
 
     async getPlaceGeocoding(config) {
-        console.log('config', config)
         const url = `/busca/lugares?nome=${config.nome}&estado=${config.estado || ''}&meso=${config.meso || ''}&srid=${SRID}`
         return this.instance.get(url)
         //return this.get(url, config)
     }
 
     async getAddressGeocoding(config) {
-        console.log('config', config)
         const url = `/busca/enderecos?end=${config.end}&exato=False&threahold=0.8&srid=${SRID}`
         return this.instance.get(url)
     }
 
     async getAddressGeocodingStructured(config) {
-        console.log('config', config)
         const url = `/busca/enderecos/estruturado?nome=${config.nome}&numero=${config.numero}&cidade=${config.cidade}&estado=${config.estado}&exato=False&threahold=0.8&srid=${SRID}`
         return this.instance.get(url)
     }
 
     async getPlaceReverseGeocoding(config) {
-        console.log('config', config)
         const url = `/busca/lugares/geocodificacao_reversa?lat=${config.lat}&long=${config.long}&limite=${config.limite}&srid=${SRID}`
         return this.instance.get(url)
     }
 
     async getAddressReverseGeocoding(config) {
-        console.log('config', config)
         const url = `/busca/enderecos/geocodificacao_reversa?lat=${config.lat}&long=${config.long}&limite=${config.limite}&srid=${SRID}`
         return this.instance.get(url)
     }
 
     async getAddressesByCEP(config) {
-        console.log('config', config)
         const url = `/busca/enderecos/cep?cep=${config.cep}&srid=${SRID}`
         return this.instance.get(url)
     }

@@ -69,14 +69,14 @@ class AddressGeocoding extends Component {
     }
     render() {
         return (
-            <div class='page'>
-                <form name="form" class="form" onSubmit={this.handleSubmit}>
+            <div className='page'>
+                <form name="form" className="form" onSubmit={this.handleSubmit}>
 
-                    <div class="form-inline " >
-                        <div class='input'>
-                            {/* <label for="name" class='label'>Nome do lugar</label> */}
+                    <div className="form-inline " >
+                        <div className='input'>
+                            {/* <label for="name" className='label'>Nome do lugar</label> */}
                             <input
-                                class='form-control'
+                                className='form-control'
                                 type="text"
                                 name="name"
                                 id="name"
@@ -86,7 +86,7 @@ class AddressGeocoding extends Component {
                                 onChange={(e) => this.setState({ name: e.target.value })}
                             />
                         </div>
-                        <div class='input input-select'>
+                        <div className='input input-select'>
                             {/* <label for='stateSelection'>Selecione o estado</label> */}
                             <AsyncSelect
                                 name="stateSelection"
@@ -98,7 +98,7 @@ class AddressGeocoding extends Component {
                                 cacheOptions
                             />
                         </div>
-                        <div class='input input-select'>
+                        <div className='input input-select'>
                             {/* <label for='mesoSelection'>Selecione a mesorregião</label> */}
                             <AsyncSelect
                                 key={this.state.selectedState.value}
@@ -111,7 +111,7 @@ class AddressGeocoding extends Component {
                                 cacheOptions
                             />
                         </div>
-                        <button class="input btn" type="submit">Buscar</button>
+                        <button className="input btn" type="submit">Buscar</button>
                     </div>
 
 

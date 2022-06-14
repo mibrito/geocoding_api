@@ -20,11 +20,11 @@ function App() {
       </header>
 
       <BrowserRouter>
-        <div class="row">
+        <div className="row">
 
           <Navbar />
 
-          <div class="col-sm">
+          <div className="col-sm">
             <Routes>
               <Route path="/" element={<AddressGeocoding />} />
               <Route path="/address_geocoding" element={<AddressGeocoding />} />

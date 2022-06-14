@@ -56,9 +56,9 @@ class ReverseGeocoding extends Component {
     render() {
         return (
             <div className='page'>
-                <form name="form" class="form" onSubmit={this.handleSubmit}>
-                    <div class="form-inline">
-                        <div class="input input-type">
+                <form name="form" className="form" onSubmit={this.handleSubmit}>
+                    <div className="form-inline">
+                        <div className="input input-type">
                             <Select
                                 style={{ maxWidth: '100%' }}
                                 onChange={e => this.setState({ type: e.value }, () => console.log('setando type', this.state.type))}
@@ -69,47 +69,47 @@ class ReverseGeocoding extends Component {
                             />
 
                         </div>
-                        <div class=" input input-lat">
+                        <div className=" input input-lat">
                             <input
                                 style={{ maxWidth: '100%' }}
                                 type="number"
                                 name="lat"
                                 id="lat"
-                                class="form-control"
+                                className="form-control"
                                 required
                                 placeholder="Latitude"
                                 value={this.state.latitude}
                                 onChange={e => this.setState({ latitude: Number(e.target.value) })}
                             />
                         </div>
-                        <div class=" input input-long">
+                        <div className=" input input-long">
                             <input
                                 style={{ maxWidth: '100%' }}
                                 type="number"
                                 name="long"
                                 id="long"
-                                class="form-control"
+                                className="form-control"
                                 required
                                 placeholder="Longitude"
                                 value={this.state.longitude}
                                 onChange={e => this.setState({ longitude: Number(e.target.value) })}
                             />
                         </div>
-                        <div class=" input input-limite">
+                        <div className=" input input-limite">
                             <input
                                 style={{ maxWidth: '100%' }}
                                 type="number"
                                 min="1" step="1"
                                 name="limite"
                                 id="limite"
-                                class="form-control"
+                                className="form-control"
                                 required
                                 placeholder="Limite"
                                 value={this.state.limite}
                                 onChange={e => this.setState({ limite: Number(e.target.value) })}
                             />
                         </div>
-                        <button class="input btn" type="submit">Buscar</button>
+                        <button className="input btn" type="submit">Buscar</button>
                     </div>
 
                 </form>

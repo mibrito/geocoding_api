@@ -28,7 +28,6 @@ class Map extends Component {
     }
 
     createMap = () => {
-        console.log('dentro de create map')
         if (this.map.current) return
         this.map.current = new mapboxgl.Map({
             container: "mapContainer",
@@ -42,9 +41,7 @@ class Map extends Component {
     }
 
     clickEvent = (e) => {
-        console.log('click event', e.lngLat)
         if (this.clickMarker !== undefined) {
-            console.log('removendo marker', this.clickMarker)
             this.clickMarker.remove()
             }
         this.clickMarker = new mapboxgl.Marker({ color: '#A52A2A', scale: 0.5 })
@@ -56,18 +53,14 @@ class Map extends Component {
                     )
             )
             .addTo(this.map.current)
-        console.log('marker element', this.clickMarker.getElement())
         this.props.sendClickedCoordinates(e.lngLat.lat, e.lngLat.lng)
     }
 
     addLocations() {
-        console.log('dentro de addLocations', this.props)  
-
         this.currentMarkers.forEach((marker) => {
             marker.remove()
         })
         if (this.props.locations.response === undefined || this.props.locations.response.length === 0 || !this.map.current) {
-            console.log('locations vazio')
             this.map.current.setCenter([0, 30])
             this.map.current.setZoom(1)
             return
@@ -75,7 +68,6 @@ class Map extends Component {
             
 
         var bounds = new mapboxgl.LngLatBounds();
-        console.log()
         switch (this.props.locations.type) {
             case "Endereços":
                 this.props.locations.response.forEach((end => {
@@ -222,7 +214,7 @@ class Map extends Component {
 
     render() {
         return (
-            <div class="row" style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <div className="row" style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <div id="mapContainer" className="map-container" style={{ height: "600px", width: "80%" }}></div>
             </div >
         )
