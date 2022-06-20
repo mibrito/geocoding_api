@@ -40,11 +40,12 @@ services:
       - REACT_APP_API_URL=http://dev.projetobrumadinho.ufmg.br:5003
     container_name: geocoding_frontend
     volumes:
-      - './web/src:/usr/src/app/src'
+      - './web/src:/app/src'
+      - './web/public:/app/public'
     ports:
       - '3000:3000'
-    depends_on:
-      - backend
+        #    depends_on:
+        #      - backend
 
 
 volumes:

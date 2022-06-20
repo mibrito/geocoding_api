@@ -17,13 +17,11 @@
   /* background-color: #282c34; */
   /* min-height: 100vh; */
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  padding-top: 15px;
-  padding-left: 250px;
+  padding: 1rem 0;
 }
 
 .App-link {
@@ -39,21 +37,8 @@
   }
 }
 
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-
 }
-
-
-
-/* .page{
-  display: flex;
-  height: 90vh;
-  align-items: center;
-  vertical-align: middle;
-  justify-content: center ;
-  font-size: 3rem;
-  position: relative;
-} */

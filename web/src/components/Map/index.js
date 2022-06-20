@@ -1,82 +1,81 @@
 import { Component } from 'react'
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl'
 import './styles.css'
 
 class Map extends Component {
-    constructor(props) {
-        super(props);
-        //TODO: colocar token nas variáveis de ambiente
-        mapboxgl.accessToken = 'pk.eyJ1IjoibGVvbmVsbW90YSIsImEiOiJja3k0ZmhmZWUwYmRzMnZwOGVzc3gzc3JtIn0._T-Ie9E_XOgWuGgLytYIAg';
-        this.map = {}
-        this.state = {
-            locations: []
-        }
-        this.clickMarker = undefined
-        this.currentMarkers = []
+  constructor (props) {
+    super(props)
+    // TODO: colocar token nas variáveis de ambiente
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGVvbmVsbW90YSIsImEiOiJja3k0ZmhmZWUwYmRzMnZwOGVzc3gzc3JtIn0._T-Ie9E_XOgWuGgLytYIAg'
+    this.map = {}
+    this.state = {
+      locations: []
+    }
+    this.clickMarker = undefined
+    this.currentMarkers = []
+  }
+
+  componentDidMount = () => {
+    this.createMap()
+    this.addLocations()
+  }
+
+  componentDidUpdate = () => {
+    if (this.props.locations.response !== this.state.locations.response) {
+      this.addLocations()
+      this.setState({ locations: this.props.locations })
+    }
+  }
+
+  createMap = () => {
+    if (this.map.current) return
+    this.map.current = new mapboxgl.Map({
+      container: 'map-container',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-43.96, -19.91],
+      zoom: 12
+    })
+    const nav = new mapboxgl.NavigationControl()
+    this.map.current.addControl(nav, 'top-right')
+    this.map.current.on('click', e => this.clickEvent(e))
+  }
+
+  clickEvent = (e) => {
+    if (this.clickMarker !== undefined) {
+      this.clickMarker.remove()
+    }
+    this.clickMarker = new mapboxgl.Marker({ color: '#A52A2A', scale: 0.5 })
+      .setLngLat([e.lngLat.lng, e.lngLat.lat])
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 })
+          .setHTML(
+            '<p>Ponto clicado</p>'
+          )
+      )
+      .addTo(this.map.current)
+    this.props.sendClickedCoordinates(e.lngLat.lat, e.lngLat.lng)
+  }
+
+  addLocations () {
+    this.currentMarkers.forEach((marker) => {
+      marker.remove()
+    })
+    if (this.props.locations.response === undefined || this.props.locations.response.length === 0 || !this.map.current) {
+      this.map.current.setCenter([0, 30])
+      this.map.current.setZoom(1)
+      return
     }
 
-    componentDidMount = () => {
-        this.createMap()
-        this.addLocations()
-    }
-
-    componentDidUpdate = () => {
-        if (this.props.locations.response !== this.state.locations.response) {
-            this.addLocations()
-            this.setState({ locations: this.props.locations })
-        }
-    }
-
-    createMap = () => {
-        if (this.map.current) return
-        this.map.current = new mapboxgl.Map({
-            container: "mapContainer",
-            style: "mapbox://styles/mapbox/streets-v11",
-            center: [-43.96, -19.91],
-            zoom: 12,
-        });
-        const nav = new mapboxgl.NavigationControl();
-        this.map.current.addControl(nav, "top-right");
-        this.map.current.on('click', e => this.clickEvent(e))
-    }
-
-    clickEvent = (e) => {
-        if (this.clickMarker !== undefined) {
-            this.clickMarker.remove()
-            }
-        this.clickMarker = new mapboxgl.Marker({ color: '#A52A2A', scale: 0.5 })
-            .setLngLat([e.lngLat.lng, e.lngLat.lat])
+    const bounds = new mapboxgl.LngLatBounds()
+    switch (this.props.locations.type) {
+      case 'Endereços':
+        this.props.locations.response.forEach(end => {
+          bounds.extend(end.geom_json.coordinates)
+          const newMarker = new mapboxgl.Marker()
+            .setLngLat(end.geom_json.coordinates)
             .setPopup(
-                new mapboxgl.Popup({ offset: 25 })
-                    .setHTML(
-                        `<p>Ponto clicado</p>`
-                    )
-            )
-            .addTo(this.map.current)
-        this.props.sendClickedCoordinates(e.lngLat.lat, e.lngLat.lng)
-    }
-
-    addLocations() {
-        this.currentMarkers.forEach((marker) => {
-            marker.remove()
-        })
-        if (this.props.locations.response === undefined || this.props.locations.response.length === 0 || !this.map.current) {
-            this.map.current.setCenter([0, 30])
-            this.map.current.setZoom(1)
-            return
-        }
-            
-
-        var bounds = new mapboxgl.LngLatBounds();
-        switch (this.props.locations.type) {
-            case "Endereços":
-                this.props.locations.response.forEach((end => {
-                    bounds.extend(end.geom_json.coordinates)
-                    const newMarker = new mapboxgl.Marker()
-                        .setLngLat(end.geom_json.coordinates)
-                        .setPopup(
-                            new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(
+              new mapboxgl.Popup({ offset: 25 })
+                .setHTML(
                                     `<p><b>Id:</b> ${end.id}</p>
                                     <p><b>Tipo Logradouro:</b> ${end.tipo_logra}</p>
                                     <p><b>Nome do Logradouro:</b> ${end.nome_logra}</p>
@@ -84,20 +83,20 @@ class Map extends Component {
                                     <p><b>Bairro:</b> ${end.bairro || 'null'}</p>
                                     <p><b>Cidade:</b> ${end.cidade}</p>
                                     `
-                                )
-                        )
-                        .addTo(this.map.current)
-                    this.currentMarkers.push(newMarker)
-                }))
-                break
-            case "Endereços Reversa":
-                this.props.locations.response.forEach((end => {
-                    bounds.extend(end.geom_json.coordinates)
-                    const newMarker = new mapboxgl.Marker()
-                        .setLngLat(end.geom_json.coordinates)
-                        .setPopup(
-                            new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(
+                )
+            )
+            .addTo(this.map.current)
+          this.currentMarkers.push(newMarker)
+        })
+        break
+      case 'Endereços Reversa':
+        this.props.locations.response.forEach(end => {
+          bounds.extend(end.geom_json.coordinates)
+          const newMarker = new mapboxgl.Marker()
+            .setLngLat(end.geom_json.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 })
+                .setHTML(
                                     ` <div style="max-height: 200px; overflow: scroll;">
                                     <p><b>Id:</b> ${end.id}</p>
                                     <p><b>Tipo Logradouro:</b> ${end.tipo_logra}</p>
@@ -123,21 +122,21 @@ class Map extends Component {
                                     <p><b>RISP Região:</b> ${end.risp_regiao}</p>
                                     </div>
                                     `
-                                )
-                        )
-                        .addTo(this.map.current)
-                    this.currentMarkers.push(newMarker)
-                }))
+                )
+            )
+            .addTo(this.map.current)
+          this.currentMarkers.push(newMarker)
+        })
 
-                break
-            case "Endereços CEP":
-                this.props.locations.response.forEach((end => {
-                    bounds.extend(end.geom.coordinates)
-                    const newMarker = new mapboxgl.Marker()
-                        .setLngLat(end.geom.coordinates)
-                        .setPopup(
-                            new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(
+        break
+      case 'Endereços CEP':
+        this.props.locations.response.forEach(end => {
+          bounds.extend(end.geom.coordinates)
+          const newMarker = new mapboxgl.Marker()
+            .setLngLat(end.geom.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 })
+                .setHTML(
                                     `<p><b>Id:</b> ${end.id}</p>
                                     <p><b>Tipo Logradouro:</b> ${end.tipo_logra}</p>
                                     <p><b>Nome do Logradouro:</b> ${end.nome_logra}</p>
@@ -145,22 +144,22 @@ class Map extends Component {
                                     <p><b>Bairro:</b> ${end.bairro || 'null'}</p>
                                     <p><b>Cidade:</b> ${end.cidade}</p>
                                     `
-                                )
-                        )
-                        .addTo(this.map.current)
-                    this.currentMarkers.push(newMarker)
-                }))
+                )
+            )
+            .addTo(this.map.current)
+          this.currentMarkers.push(newMarker)
+        })
 
-                break
-            case "Lugares":
-                this.props.locations.response.forEach((plc => {
-                    if (plc.objeto.type !== "Point") return
-                    bounds.extend(plc.objeto.coordinates)
-                    const newMarker = new mapboxgl.Marker()
-                        .setLngLat(plc.objeto.coordinates)
-                        .setPopup(
-                            new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(
+        break
+      case 'Lugares':
+        this.props.locations.response.forEach(plc => {
+          if (plc.objeto.type !== 'Point') return
+          bounds.extend(plc.objeto.coordinates)
+          const newMarker = new mapboxgl.Marker()
+            .setLngLat(plc.objeto.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 })
+                .setHTML(
                                     `
                                     <div style="max-height: 200px; overflow: scroll;">
                                     <p><b>Id:</b> ${plc.place_id}</p>
@@ -183,42 +182,40 @@ class Map extends Component {
                                     <p><b>RISP Região:</b> ${plc.risp_regiao}</p>
                                     </div>
                                     `
-                                )
-                        )
-                        .addTo(this.map.current)
-                    this.currentMarkers.push(newMarker)
-                }))
-                break
-            case "Lugares Direta":
-                this.props.locations.response.forEach((plc => {
-                    if (!plc.point) return
-                    bounds.extend(plc.point.coordinates)
-                    const newMarker = new mapboxgl.Marker()
-                        .setLngLat(plc.point.coordinates)
-                        .setPopup(
-                            new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(
+                )
+            )
+            .addTo(this.map.current)
+          this.currentMarkers.push(newMarker)
+        })
+        break
+      case 'Lugares Direta':
+        this.props.locations.response.forEach(plc => {
+          if (!plc.point) return
+          bounds.extend(plc.point.coordinates)
+          const newMarker = new mapboxgl.Marker()
+            .setLngLat(plc.point.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 })
+                .setHTML(
                                     `<p><b>Id:</b> ${plc.place_id}</p>
                                     <p><b>Nome:</b> ${plc.name}</p>
                                     `
-                                )
-                        )
-                        .addTo(this.map.current)
-                    this.currentMarkers.push(newMarker)
-                }))
-                break
-            default:
-        }
-        this.map.current.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+                )
+            )
+            .addTo(this.map.current)
+          this.currentMarkers.push(newMarker)
+        })
+        break
+      default:
     }
+    this.map.current.fitBounds(bounds, { padding: 50, maxZoom: 15 })
+  }
 
-    render() {
-        return (
-            <div className="row" style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <div id="mapContainer" className="map-container" style={{ height: "600px", width: "80%" }}></div>
-            </div >
-        )
-    }
+  render () {
+    return (
+      <div id='map-container' className='map-container' />
+    )
+  }
 }
 
 export default Map

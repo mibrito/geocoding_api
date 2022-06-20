@@ -20,13 +20,13 @@ div .input-group div .input-group button {
 
 
 
-.input > label{
+.input > label {
     font-weight: bold;
     text-align: left;
     font-size: smaller;
 }
 
-.input{
+.input {
     max-width: 350px;
     text-align: left;     
     padding-left: 5px;
@@ -36,44 +36,45 @@ div .input-group div .input-group button {
 } 
 
 
-.input-select{
+.input-select {
     max-width: 300px; 
 }
 
-.input-address{
+.input-address {
     width: 500px;
     margin-bottom: 5px;
 }
 
-.input-type{
+.input-type {
     width: 170px;
 }
 
-.input-lat, .input-long, .input-limite{
+.input-lat, .input-long, .input-limite {
     width: 200px;
 }
 
-.input-name, .input-neighborhood, .input-city, .input-state, .input-number{
+.input-name, .input-neighborhood, .input-city, .input-state, .input-number {
     width: 180px;
 }
 
-.btn{
+.btn {
     max-width: 80px;
     margin: 5px;
 }
 
-.add{
+.add {
     max-width: 160px;
 }
 
 
-.form-inline{
+.form-inline {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
 
-.form{
+.form {
   margin: center;
   padding-top: 15px;
   padding-bottom: 10px;

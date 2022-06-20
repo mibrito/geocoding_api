@@ -1,12 +1,6 @@
 div .map-container {
-    /* display: flex; */
-    justify-content: center;
-    align-items: center;
     margin: 10pt;
-    height: "600px";
-    /* width: "1000px"; */
-    /* padding-right: "10%" ;
-    padding-left: "10%" */
+    height: 400px;
 }
 
 p{
